@@ -38,7 +38,7 @@ user_email = get_ses('user_email', '')
 
 end_date = date.today().isoformat()
 ALLOWED_EMAILS = ["test@test.com"]
-if user_email not in ALLOWED_EMAILS:
+if user_email.strip().lower() not in [email.lower() for email in ALLOWED_EMAILS]:
     st.warning("Access denied. Contact admin.")
     st.stop()
 
