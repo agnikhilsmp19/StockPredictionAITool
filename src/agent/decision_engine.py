@@ -1,3 +1,5 @@
+import numpy as np
+
 from src.agent.indicators import calculate_rsi
 
 def make_decision(preds, df, threshold=0.02):
@@ -54,3 +56,24 @@ def make_decision(preds, df, threshold=0.02):
     final = max(set(signals), key=signals.count)
 
     return final, explanation
+
+def decide_action(current, predicted):
+    # Convert to float safely
+    if hasattr(current, "item"):
+        current = current.item()
+    else:
+        current = float(np.array(current).squeeze())
+
+    if hasattr(predicted, "item"):
+        predicted = predicted.item()
+    else:
+        predicted = float(np.array(predicted).squeeze())
+
+    if predicted > current * 1.01:
+        return "BUY"
+    elif predicted < current * 0.99:
+        return "SELL"
+    else:
+        return "HOLD"
+    
+decision_icon = {"Buy": "🟢", "Sell": "🔴", "Hold": "🟡"}

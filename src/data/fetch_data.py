@@ -1,12 +1,24 @@
 import yfinance as yf
 import pandas as pd
 import os
+from datetime import date
 
 root_dir = os.getcwd()   # Gets current working directory
 print("Root directory:", root_dir)
 DATA_DIR = os.path.join(root_dir, "data", "raw")
 
-def fetch_stock(symbol="INFY", start="2020-01-01", end="2025-01-01"):
+def fetch_stock(symbol, start, end, data_dir):
+    end = end or date.today().isoformat()
+    ticker = f"{symbol.upper()}.NS"
+    filename = data_dir / f"{symbol.upper()}_{end}.csv"
+    if filename.exists():
+        return filename
+    data = yf.download(ticker, start=start, end=end)
+    filename.parent.mkdir(parents=True, exist_ok=True)
+    data.to_csv(filename)
+    return filename
+
+def fetch_stock1(symbol="INFY", start="2020-01-01", end="2025-01-01"):
     # Ensure NSE symbol ends with .NS
     ticker = f"{symbol.upper()}.NS"
     data = yf.download(ticker, start=start, end=end)
