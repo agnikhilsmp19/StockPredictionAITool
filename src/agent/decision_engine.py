@@ -30,7 +30,7 @@ def make_decision(preds, df, threshold=0.02):
     rsi = calculate_rsi(df["Close"])
     latest_rsi = rsi.iloc[-1].values[0]
     #latest_rsi = df["RSI"].iloc[-1]   # gets the last value as a float
-    print("latest_rsi - ",latest_rsi)
+    #print("latest_rsi - ",latest_rsi)
     if latest_rsi > 70:
         rsi_signal = "SELL"
         explanation.append(f"RSI = {latest_rsi:.2f} → Overbought.")

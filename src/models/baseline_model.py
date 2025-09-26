@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import root_mean_squared_error
 
 root_dir = os.getcwd()   # Gets current working directory
-print("Root directory:", root_dir)
+#print("Root directory:", root_dir)
 DATA_DIR = os.path.join(root_dir, "data", "raw")
 
 data_path = os.path.join(DATA_DIR, "INFY.csv")
@@ -24,10 +24,10 @@ model.fit(X_train, y_train)
 
 pred = model.predict(X_test)
 # rmse = mean_squared_error(y_test, pred, squared=False)
-# print("RMSE:", rmse)
+# #print("RMSE:", rmse)
 
 rmse = root_mean_squared_error(y_test, pred)
-print("RMSE:", rmse)
+#print("RMSE:", rmse)
 
 plt.figure(figsize=(10,6))
 plt.plot(y_test.values, label="Actual")

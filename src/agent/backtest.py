@@ -4,7 +4,7 @@ import pandas as pd
 from src.agent.decision_engine import decide_action
 
 root_dir = os.getcwd()   # Gets current working directory
-print("Root directory:", root_dir)
+#print("Root directory:", root_dir)
 DATA_DIR = os.path.join(root_dir, "data", "raw")
 
 data_path = os.path.join(DATA_DIR, "INFY.csv")
@@ -38,26 +38,25 @@ for col in ["Open", "High", "Low", "Close", "Volume"]:
 # Now this will work without error
 portfolio_value = cash + stock * data['Close'].iloc[-1]
 
-print("Final Portfolio Value:", portfolio_value)
+#print("Final Portfolio Value:", portfolio_value)
 
-def backtest(data, initial_cash=100000):
-    cash = initial_cash
+def backtest(data, price_column="Close"):
+    cash = 100000
     stock = 0
     trades = []
 
     for i in range(len(data) - 1):
         decision = data["Decision"].iloc[i]
-        price = data["Close"].iloc[i]
+        price = data[price_column].iloc[i]
 
         if decision == "BUY" and cash >= price:
             stock += 1
             cash -= price
-            trades.append(f"BUY at {price:.2f}")
-
+            trades.append(f"BUY at {price}")
         elif decision == "SELL" and stock > 0:
             stock -= 1
             cash += price
-            trades.append(f"SELL at {price:.2f}")
+            trades.append(f"SELL at {price}")
 
-    final_value = cash + stock * data["Close"].iloc[-1]
-    return final_value, trades[-5:]  # last 5 trades
+    final_value = cash + stock * data[price_column].iloc[-1]
+    return final_value, trades

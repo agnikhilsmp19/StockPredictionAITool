@@ -117,11 +117,13 @@ elif model_type == "LSTM":
 st.write("#### 🧠 Recent Agent Decisions")
 st.dataframe(data_test.tail()[["Decision", "Icon"]])
 
-# --- Backtest ---
-final_val, last_trades = backtest(data_test)
+# Determine which column to use for backtesting
+price_col = "Close" if "Close" in data_test.columns else "Actual"
+final_val, last_trades = backtest(data_test, price_column=price_col)
+
 st.write(f"#### 🧾 Portfolio Backtest Value: ₹{final_val:,.2f}")
 st.write("Last 5 trades:")
-for t in last_trades:
+for t in last_trades[-5:]:
     st.write(t)
 
 # --- Sidebar Instructions ---

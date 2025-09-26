@@ -28,7 +28,7 @@ def load_and_clean_stock_data(ticker: str) -> pd.DataFrame:
     # Drop rows with NaN after coercion (these were strings like 'INFY.NS')
     data = data.dropna(subset=["Close", "Open", "High", "Low", "Volume"])
 
-    print(data.head(), data.dtypes)  # sanity check
+    #print(data.head(), data.dtypes)  # sanity check
     # Ensure only Close column
     data = data.reset_index()[['Date', 'Close']]
 

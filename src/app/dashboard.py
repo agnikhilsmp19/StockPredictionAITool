@@ -11,11 +11,11 @@ start_date = st.date_input("Start Date", pd.to_datetime("2020-01-01"))
 end_date = st.date_input("End Date", pd.to_datetime("2025-01-01"))
 
 root_dir = os.getcwd()   # Gets current working directory
-print("Root directory:", root_dir)
+#print("Root directory:", root_dir)
 DATA_DIR = os.path.join(root_dir, "data", "raw")
 
 data_path = os.path.join(DATA_DIR, f"{ticker}.csv")
-print(data_path)
+#print(data_path)
 try:
     data = pd.read_csv(data_path, index_col=0, parse_dates=True)
     data = data[data["Close"] != "INFY.NS"]
@@ -24,7 +24,7 @@ try:
 
     df = data.dropna()
 
-    print(data.head())
+    #print(data.head())
     
     st.write(f"### {ticker} Data Preview")
     st.write(data.tail())

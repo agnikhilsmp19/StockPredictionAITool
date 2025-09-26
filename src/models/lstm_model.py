@@ -71,7 +71,7 @@ DATA_PRED.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
 pred_path = DATA_PRED / "lstm_pred_INFY.csv"
 pred_df.to_csv(pred_path)
 
-print(f"Saved LSTM predictions to: {pred_path}")
+#print(f"Saved LSTM predictions to: {pred_path}")
 
 # Plot
 plt.figure(figsize=(12, 6))
