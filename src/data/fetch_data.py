@@ -15,7 +15,7 @@ def fetch_stock(symbol, start, end, data_dir):
         return filename
     data = yf.download(ticker, start=start, end=end)
     filename.parent.mkdir(parents=True, exist_ok=True)
-    data.to_csv(filename)
+    data.to_csv(filename, float_format="%.2f")
     return filename
 
 def fetch_stock1(symbol="INFY", start="2020-01-01", end="2025-01-01"):
@@ -35,10 +35,10 @@ def fetch_stock1(symbol="INFY", start="2020-01-01", end="2025-01-01"):
 
     # Save CSV
     os.makedirs(DATA_DIR, exist_ok=True)
-    # data.to_csv(f"../../data/raw/{symbol}.csv")
+    # data.to_csv(f"../../data/raw/{symbol}.csv", float_format="%.2f")
     # #print(f"Saved {symbol} data to CSV")
     save_path = os.path.join(DATA_DIR, f"{symbol}.csv")
-    data.to_csv(save_path, index=False)   # no extra index junk
+    data.to_csv(save_path, index=False, float_format="%.2f")   # no extra index junk
     #print(f"✅ Saved {symbol} to {save_path}")
 
     return data

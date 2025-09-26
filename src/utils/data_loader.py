@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pathlib import Path
 
 # Root directory of your project
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,4 +33,26 @@ def load_and_clean_stock_data(ticker: str) -> pd.DataFrame:
     # Ensure only Close column
     data = data.reset_index()[['Date', 'Close']]
 
+    return data
+
+def load_and_clean_stock_data_lstm(ticker, data_dir=None, date_str=None):
+    # Build path dynamically based on ticker and date (today by default)
+    from datetime import date
+    if date_str is None:
+        date_str = date.today().isoformat()
+    if data_dir is None:
+        ROOT = Path(__file__).resolve().parents[2]
+        data_dir = ROOT / "data" / "raw"
+    fname = data_dir / f"{ticker.upper()}_{date_str}.csv"
+    if not fname.exists():
+        raise FileNotFoundError(f"{fname} not found. Please fetch latest CSV for {ticker}.")
+    data = pd.read_csv(fname, index_col=0, parse_dates=True)
+    # Make sure Close is float and drop missing
+    data["Close"] = pd.to_numeric(data["Close"], errors="coerce")
+    
+    data = data.dropna(subset=["Close"])
+
+    data["High"] = pd.to_numeric(data["High"], errors="coerce")
+    data["Low"] = pd.to_numeric(data["Low"], errors="coerce")
+    data["Open"] = pd.to_numeric(data["Open"], errors="coerce")
     return data

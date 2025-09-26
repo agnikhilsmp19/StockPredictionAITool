@@ -2,12 +2,13 @@ import os
 import pandas as pd
 
 from src.agent.decision_engine import decide_action
+from datetime import date
 
 root_dir = os.getcwd()   # Gets current working directory
 #print("Root directory:", root_dir)
 DATA_DIR = os.path.join(root_dir, "data", "raw")
-
-data_path = os.path.join(DATA_DIR, "INFY.csv")
+end_date = date.today().isoformat()
+data_path = os.path.join(DATA_DIR, f"INFY_{end_date}.csv")
 
 data = pd.read_csv(data_path)
 data['Target'] = data['Close'].shift(-1)

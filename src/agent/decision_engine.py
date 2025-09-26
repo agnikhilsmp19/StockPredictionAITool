@@ -69,6 +69,7 @@ def decide_action(current, predicted):
     else:
         predicted = float(np.array(predicted).squeeze())
 
+    
     if predicted > current * 1.01:
         return "BUY"
     elif predicted < current * 0.99:
@@ -76,4 +77,4 @@ def decide_action(current, predicted):
     else:
         return "HOLD"
     
-decision_icon = {"Buy": "🟢", "Sell": "🔴", "Hold": "🟡"}
+decision_icon = {"BUY": "🟢", "SELL": "🔴", "HOLD": "🟡"}

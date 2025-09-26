@@ -12,6 +12,7 @@ from src.data.fetch_data import fetch_stock
 from src.agent.decision_engine import decide_action, decision_icon
 from src.agent.backtest import backtest  # Ensure your updated backtest can take price_column
 from src.models.linear_model import run_linear_regression
+from src.models.lstm_model import train_and_save_lstm
 
 # --- Sidebar UI with Form for Mobile Friendliness ---
 with st.sidebar.form(key="user-input-form"):
@@ -37,12 +38,12 @@ start_date = get_ses('start_date', pd.to_datetime("2020-01-01"))
 user_email = get_ses('user_email', '')
 
 end_date = date.today().isoformat()
-ALLOWED_EMAILS = ["test@test.com"]
+ALLOWED_EMAILS = ["test@test.com","agnikhilsmp19@gmail.com"]
 if user_email.strip().lower() not in [email.lower() for email in ALLOWED_EMAILS]:
     st.warning("Access denied. Contact admin.")
     st.stop()
 
-st.title("📊 Indian Stock Prediction Agentic AI Dashboard")
+st.title("📊 Indian Stock Prediction Dashboard")
 
 # --- Fetch or Load Stock Data (with Refresh Button below form) ---
 stock_file = DATA_RAW / f"{ticker}_{end_date}.csv"
@@ -56,6 +57,12 @@ if refresh_clicked or not stock_file.exists():
             end=end_date,
             data_dir=DATA_RAW,
         )
+        
+         # 2. Train and save LSTM predictions for this ticker
+        train_and_save_lstm(ticker)
+        st.sidebar.success(f"{ticker} data and LSTM predictions refreshed!")
+        stock_file = DATA_RAW / f"{ticker}_{end_date}.csv"
+        
         st.sidebar.success(f"{ticker} data refreshed ({filename.name})")
     stock_file = DATA_RAW / f"{ticker}_{end_date}.csv"
 
@@ -67,16 +74,23 @@ else:
 
 # --- Load Data ---
 data = pd.read_csv(stock_file, index_col=0, parse_dates=True)
-
+data = data.round(2)
 # ✅ Ensure numeric Close column
 if "Close" in data.columns:
     data["Close"] = pd.to_numeric(data["Close"], errors="coerce")
     data = data.dropna(subset=["Close"])
+
+    data["High"] = pd.to_numeric(data["High"], errors="coerce")
+    data["Open"] = pd.to_numeric(data["Open"], errors="coerce")
+    data["Low"] = pd.to_numeric(data["Low"], errors="coerce")
+
 else:
     st.error("⚠️ No 'Close' column found in stock file.")
     st.stop()
 
 st.write(f"#### Latest {ticker} Price Data")
+
+data = data.round(2)
 st.dataframe(data.tail())
 
 # --- Charts & Indicators ---
