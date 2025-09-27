@@ -10,6 +10,8 @@ DATA_DIR = os.path.join(root_dir, "data", "raw")
 end_date = date.today().isoformat()
 data_path = os.path.join(DATA_DIR, f"INFY_{end_date}.csv")
 
+print("data_path",data_path)
+
 data = pd.read_csv(data_path)
 data['Target'] = data['Close'].shift(-1)
 data.dropna(inplace=True)
@@ -53,11 +55,11 @@ def backtest(data, price_column="Close"):
         if decision == "BUY" and cash >= price:
             stock += 1
             cash -= price
-            trades.append(f"BUY at {price}")
+            trades.append(f"BUY at {price.round(2)}")
         elif decision == "SELL" and stock > 0:
             stock -= 1
             cash += price
-            trades.append(f"SELL at {price}")
+            trades.append(f"SELL at {price.round(2)}")
 
     final_value = cash + stock * data[price_column].iloc[-1]
     return final_value, trades
