@@ -132,6 +132,7 @@ Absolutely! Drop your scripts in models/ and call as needed.
 
 📬 Contact
 For questions or collaborations, email (nikhil@nikhilagarwal.co.in) or connect on LinkedIn!
+Website - https://www.nikhilagarwal.co.in/p/contact-us.html
 
 Ready to revolutionize your stock research? Fork, star, and try it out! 🚀
 
