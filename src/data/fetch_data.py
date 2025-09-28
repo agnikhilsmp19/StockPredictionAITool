@@ -11,9 +11,15 @@ def fetch_stock(symbol, start, end, data_dir):
     end = end or date.today().isoformat()
     ticker = f"{symbol.upper()}.NS"
     filename = data_dir / f"{symbol.upper()}_{end}.csv"
+    print("filename.exists -- ",filename.exists())
+    print("ticker",ticker)
+    print("filename",filename)
+    print("start",start)
+    print("end",end)
     if filename.exists():
         return filename
-    data = yf.download(ticker, start=start, end=end)
+    data = yf.download(ticker, start="2020-01-01", end=end)
+    print("data downladed")
     filename.parent.mkdir(parents=True, exist_ok=True)
     data.to_csv(filename, float_format="%.2f")
     return filename

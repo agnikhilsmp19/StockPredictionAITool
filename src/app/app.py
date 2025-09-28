@@ -60,6 +60,8 @@ def dashboard():
     end_date = date.today().isoformat()
     refresh_clicked = st.button("🔄 Refresh Stock Data")
     stock_file = DATA_RAW / f"{ticker}_{end_date}.csv"
+    print("start_date - app.py",start_date)
+    #print("start_date - app.py",start_date.date())
     if refresh_clicked or not stock_file.exists():
         with st.spinner("Fetching/updating stock data..."):
             fetch_stock(
@@ -115,12 +117,20 @@ def dashboard():
             st.stop()
     st.write("#### 🧠 Recent Agent Decisions")
     st.dataframe(data_test.tail()[["Decision", "Icon"]])
-    price_col = "Close" if "Close" in data_test.columns else "Actual"
-    final_val, last_trades = backtest(data_test, price_column=price_col)
-    st.write(f"#### 🧾 Portfolio Backtest Value: ₹{final_val:,.2f}")
-    st.write("Last 5 trades:")
-    for t in last_trades[-5:]:
-        st.write(t)
+    
+
+    if "Decision" in data_test.columns:
+        price_col = "Close" if "Close" in data_test.columns else "Actual"
+        final_val, last_trades = backtest(data_test, price_column=price_col)
+
+        st.write(f"#### 🧾 Portfolio Backtest Value: ₹{final_val:,.2f}")
+        st.write("Last 5 trades:")
+        for t in last_trades[-5:]:
+            st.write(t)
+    else:
+        st.warning("⚠️ No 'Decision' column found in data. Backtest skipped.")
+
+    
     st.markdown(
         """
     **Instructions:**  
